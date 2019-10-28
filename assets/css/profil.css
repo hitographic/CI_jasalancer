@@ -1,0 +1,60 @@
+
+
+
+@media (min-width: 992px) { 
+    .navbar-brand, a .nav-link{
+        color: black !important;
+        text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.7);
+    }
+
+    .nav-link {
+        text-transform: uppercase;
+        margin-right: 30px;
+    }
+
+    .nav-link:hover::after {
+        content: '';
+        display: block;
+        border-bottom: 3px solid #2600ff;
+        width: 50%;
+        margin : auto;
+        padding-bottom: 5px; 
+        margin-bottom: -8px;   
+    }
+}
+
+/* Navbar */
+body{
+
+    font-family: 'Poppins', Arial, Helvetica, sans-serif;
+}
+.navbar {
+    position: relative;
+    z-index: 1;
+
+}
+
+.navbar-brand {
+    font-family: Viga;
+    font-size: 32px;
+}
+
+.footer{
+    margin-top: 100px;
+    background-color: #311847;
+}
+
+.footer p{
+    color: white;
+    font-size: 18px;
+}
+
+.jumbotron-fluid  {
+    padding: 0;
+    margin: -75px 0 -100px;
+    background-image: linear-gradient(to top, rgb(69,29,84), rgba(255, 255, 255, 0)), url('../img/login-jasalancer.jpg');
+    background-size: cover;
+    height: 700px;
+
+}
+
