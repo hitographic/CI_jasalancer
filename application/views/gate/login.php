@@ -50,28 +50,31 @@
                             <div class="row">
                                 <div class="col-md-9 col-lg-8 mx-auto kotak">
                                     <h3 class="login-heading mb-4" style="color:white;">Selamat Datang!</h3>
-                                    <form>
+
+                                    <!-- membuat flash tampil -->
+                                    <?= $this->session->flashdata('message'); ?>
+
+                                    <form class="user" method="post" action="<?= base_url('auth') ?>">
                                         <div class="form-label-group">
-                                            <input type="email" id="inputEmail" class="form-control"
-                                                placeholder="Email address" required autofocus>
-                                            <label for="inputEmail">Email</label>
+                                            <input type="text" id="email" class="form-control"
+                                                placeholder="Email address" name="email" value="<?= set_value('email'); ?>">
+                                            <label for="email">Email</label>
+                                            <?= form_error('email', '<small class="text-danger pl-3">', '</small>'); ?>
                                         </div>
 
                                         <div class="form-label-group">
-                                            <input type="password" id="inputPassword" class="form-control"
-                                                placeholder="Password" required>
-                                            <label for="inputPassword">Password</label>
-                                        </div>
-
-                                        <div class="custom-control custom-checkbox mb-3">
-                                            <input type="checkbox" class="custom-control-input" id="customCheck1">
-                                            <label class="custom-control-label" for="customCheck1" style="color:white;">Ingat password</label>
+                                            <input type="password" id="password" class="form-control"
+                                                placeholder="Password" name="password">
+                                            <label for="password">Password</label>
+                                            <?= form_error('password', '<small class="text-danger pl-3">', '</small>'); ?>
                                         </div>
                                         <button
                                             class="btn btn-lg btn-primary btn-block btn-login text-uppercase font-weight-bold mb-2"
-                                            type="submit" style="color:#323232;">Sign in</button>
+                                            type="submit" style="color:#323232;">login</button>
                                         <div class="text-center">
-                                            <a class="small" href="#" style="color:white;">Lupa Password?</a></div>
+                                            <a class="small" href="<?= base_url('auth/forgotpassword'); ?>" style="color:white;">Lupa Password?</a><br>
+                                            <a class="small" href="<?= base_url('auth/registration'); ?>" style="color:white;">Buat Akun Baru</a>
+                                        </div>
                                     </form>
                                 </div>
                             </div>

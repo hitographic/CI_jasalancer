@@ -51,43 +51,46 @@
                         <div class="card-img-left d-none d-md-flex">
                             <!-- Background image for card set in CSS! -->
                         </div>
+
                         <div class="card-body">
                             <h5 class="card-title text-center">Register</h5>
-                            <form class="form-signin">
+                            <form class="form-signin" method='post' action="<?= base_url('auth/registration'); ?>">
                                 <div class="form-label-group">
-                                    <input type="text" id="inputUserame" class="form-control" placeholder="Username"
-                                        required autofocus>
-                                    <label for="inputUserame">Username</label>
+                                    <input type="text" id="name" class="form-control" placeholder="Nama" name="name"
+                                        value="<?= set_value('name'); ?>">
+                                    <label for="name">Nama</label>
+                                    <?= form_error('name', '<small class="text-danger pl-3">', '</small>'); ?>
                                 </div>
 
                                 <div class="form-label-group">
-                                    <input type="email" id="inputEmail" class="form-control" placeholder="Email address"
-                                        required>
-                                    <label for="inputEmail">Email</label>
+                                    <input type="text" id="email" class="form-control" placeholder="Email" name="email"
+                                        value="<?= set_value('email'); ?>">
+                                    <label for="email">Email</label>
+                                    <?= form_error('email', '<small class="text-danger pl-3">', '</small>'); ?>
                                 </div>
 
                                 <hr>
 
                                 <div class="form-label-group">
-                                    <input type="password" id="inputPassword" class="form-control"
-                                        placeholder="Password" required>
-                                    <label for="inputPassword">Password</label>
+                                    <input type="password" id="password1" name="password1" class="form-control"
+                                        placeholder="Password">
+                                    <label for="password1">Password</label>
+                                    <?= form_error('password1', '<small class="text-danger pl-3">', '</small>'); ?>
                                 </div>
 
                                 <div class="form-label-group">
-                                    <input type="password" id="inputConfirmPassword" class="form-control"
-                                        placeholder="Password" required>
-                                    <label for="inputConfirmPassword">Konfirmasi password</label>
+                                    <input type="password" id="password2" name="password2" class="form-control"
+                                        placeholder="Password">
+                                    <label for="password2">Password</label>
+                                    <?= form_error('password2', '<small class="text-danger pl-3">', '</small>'); ?>
                                 </div>
 
                                 <button class="btn btn-lg btn-primary btn-block text-uppercase"
                                     type="submit">Register</button>
-                                <a class="d-block text-center mt-2 small" href="#">Sign In</a>
+                                <a class="d-block text-center mt-2 small" href="<?= base_url('auth/forgotpassword'); ?>">Lupa Password?</a>
+                                <a class="d-block text-center mt-2 small" href="<?= base_url('auth'); ?>">Sign In</a>
                                 <hr class="my-4">
-                                <button class="btn btn-lg btn-google btn-block text-uppercase" type="submit"><i
-                                        class="fab fa-google mr-2"></i> Sign up with Google</button>
-                                <button class="btn btn-lg btn-facebook btn-block text-uppercase" type="submit"><i
-                                        class="fab fa-facebook-f mr-2"></i> Sign up with Facebook</button>
+                                
                             </form>
                         </div>
                     </div>

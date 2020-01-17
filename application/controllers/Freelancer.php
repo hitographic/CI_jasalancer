@@ -1,98 +1,184 @@
 <?php
-if (! defined('BASEPATH')) {
-    exit('No direct script access allowed');
-}
+defined('BASEPATH') or exit('No direct script access allowed');
 
 class Freelancer extends CI_Controller
 {
-    // ini tidak butuh jika sudah diatur di config > autoloads >$autoload['libraries'] = array('database');
     public function __construct()
     {
-        // aturan dari CI, jika ingin load semua database
+        // sebagai pangaman agar tidak bisa masuk langsung lewat controller di url
         parent::__construct();
-        // $this->load->database();
-        $this->load->library('session');
-        $this->load->model('Freelancer_model');
+        // menggunakan helper
+        is_logged_in();
+        $this->load->model('freelancer_model');
+        // if (!$this->session->userdata('email')) {
+        //     redirect('auth');
     }
-
-
+    
     public function index()
     {
-
-        // ini kalau gak ada yg diklik
-        // $data['mahasiswa'] = $this->Freelancer_model->getAllMahasiswa();
-        // // ini jalan kalau ada yg dicari
-        // if( $this->input->post('keyword')){
-        //     $data['mahasiswa'] = $this->Freelancer_model->cariDataMahasiswa();
-        // }
-
-
-        $data['judul'] = 'Freelacer - JasaLancer | Temukan Freelancer Terbaikmu di sini ';
-        // kirim data dari Freelancer_Model
-        $data['freelancer'] = $this->Freelancer_model->getAllfreelancer();
-        if( $this->input->post('keyword')){
-            $data['freelancer'] = $this->Freelancer_model->cariDataFreelancer();
-        }
-        // $data['skill'] = $this->Freelancer_model->getAllFreelancer('skill');
-        // $data['kota'] = $this->Freelancer_model->getAllFreelancer('kota');
-        // $data['tipe_freelancer'] = $this->Freelancer_model->getAllFreelancer('tipe_freelancer');
+        $data['title'] = 'Profil | JasaLancer';
+        // ambil data session
+        // $data['profil'] =
+        $data['user'] = $this->db->get_where('user', ['email' => $this->session->userdata('email')])->row_array();
+        // $data['profil'] = $this->Freelancer_model->getAllFreelancer();
+        $data['profil'] = $this->db->get_where('profil', ['email' => $this->session->userdata('email')])->row_array();
+       
+        $this->load->model('freelancer_model');
+        $data['kota'] = $this->freelancer_model->getKota()->row_array();
+       
+        
+        
         $this->load->view('templates/header', $data);
+        $this->load->view('templates/sidebar', $data);
+        $this->load->view('templates/topbar', $data);
         $this->load->view('freelancer/index', $data);
         $this->load->view('templates/footer');
     }
 
-
-//     public function fetch_data()
-//     {
-//         sleep(1);
-//         $skill = $this->input->post('skill');
-//         $kota = $this->input->post('kota');
-//         $tipe_freelancer = $this->input->post('tipe_freelancer');
-//         $this->load->library('pagination');
-//         $config = array();
-//         $config['base_url'] = '#';
-//         $config['total_rows'] = $this->product_filter_model->count_all( $skill, $kota, $tipe_freelancer);
-//         $config['per_page'] = 8;
-//         $config['uri_segment'] = 3;
-//         $config['use_page_numbers'] = true;
-//         $config['full_tag_open'] = '<ul class="pagination">';
-//         $config['full_tag_close'] = '</ul>';
-//         $config['first_tag_open'] = '<li>';
-//         $config['first_tag_close'] = '</li>';
-//         $config['last_tag_open'] = '<li>';
-//         $config['last_tag_close'] = '</li>';
-//         $config['next_link'] = '&gt;';
-//         $config['next_tag_open'] = '<li>';
-//         $config['next_tag_close'] = '</li>';
-//         $config['prev_link'] = '&lt;';
-//         $config['prev_tag_open'] = '<li>';
-//         $config['prev_tag_close'] = '</li>';
-//         $config['cur_tag_open'] = "<li class='active'><a href='#'>";
-//         $config['cur_tag_close'] = '</a></li>';
-//         $config['num_tag_open'] = '<li>';
-//         $config['num_tag_close'] = '</li>';
-//         $config['num_links'] = 3;
-//         $this->pagination->initialize($config);
-//         $page = $this->uri->segment(3);
-//         $start = ($page - 1) * $config['per_page'];
-//         $output = array(
-//    'pagination_link'  => $this->pagination->create_links(),
-//    'product_list'   => $this->freelancer_model->fetch_data($config["per_page"], $start, $skill, $kota, $tipe_freelancer)
-//   );
-//         echo json_encode($output);
-//     }
-  
-
-
-
-//     public function profil()
-//     {
-//         $data['judul'] = 'Freelacer - JasaLancer | Temukan Freelancer Terbaikmu di sini ';
-//         // kirim data dari Freelancer_Model
-//         $data['freelancer'] = $this->Freelancer_model->getAllFreelancer();
+    public function edit()
+    {
+        //  membuat nama model alternatif bisa 'Peoples_model' atau 'peoples'
+        $this->load->model('Freelancer_model');
+        $data['title'] = 'Edit Profil';
+        $data['kota'] = $this->db->get('kota')->result_array();
+        $data['user'] = $this->db->get_where('user', ['email' => $this->session->userdata('email')])->row_array();
+        $data['profil'] = $this->db->get_where('profil', ['email' => $this->session->userdata('email')])->row_array();
+        $data['tipe'] = $this->db->get('tipe_freelancer')->result_array();
+        // $data['peoples']= $this->db->get_where('user_menu', ['id'=> $id])->row_array(); BUKAN INI
+        // membuat manual jurusan,seharusnya di model
         
-//         $this->load->view('templates/header-hitam', $data);
-//         $this->load->view('freelancer/profil', $data);
-//         $this->load->view('templates/footer');
-//     }
+        
+        
+        // ambil data session
+        // $data['user'] = $this->db->get_where('user', ['email' => $this->session->userdata('email')])->row_array(); BUKAN INI
+        // $data['profil'] = $this->Freelancer_model->getAllFreelancer(); BUKAN INI
+        // rules
+        $this->form_validation->set_rules('name', 'Full Name', 'required|trim');
+        
+        // form validation
+        if ($this->form_validation->run() == false) {
+            $this->load->view('templates/header', $data);
+            $this->load->view('templates/sidebar', $data);
+            $this->load->view('templates/topbar', $data);
+            $this->load->view('freelancer/edit', $data);
+            $this->load->view('templates/footer');
+        } else {
+            // $id = $this->input->post('id');
+            $name = $this->input->post('name');
+            $id = $this->input->post('id');
+            $idkota = $this->input->post('kota');
+            $email = $this->input->post('email');
+            // $dataku = array(
+            //     // 'name' => $this->input->post('name'),
+            //     'name' => $name,
+            //     'email' => $email
+                
+            // );
+            $relasi = array(
+                // 'name' => $this->input->post('name'),
+                'email' => $email,
+                'id_kota' => $idkota,
+                'id_user' => $id,
+                'alamat' => $this->input->post('alamat'),
+                'kontak' => $this->input->post('kontak'),
+                'prof_sum' => $this->input->post('prof_sum'),
+                'prof_skill' => $this->input->post('prof_skill'),
+                'jenis_kelamin' => $this->input->post('jenis_kelamin'),
+                'tgl_lahir' => $this->input->post('tgl_lahir'),
+                'tipe_freelancer' => $this->input->post('tipe'),
+                
+            );
+            
+            $this->db->where('email', $email);
+            // $this->db->where('id', $id);
+            $this->db->update('profil', $relasi);
+            
+            // cek jika ada gambar yang akan diupload
+            $upload_image = $_FILES['image']['name'];
+
+            if ($upload_image) {
+                // setting preferences
+                $config['allowed_types'] = 'gif|jpg|png';
+                $config['max_size']     = '2048'; //max 2 mb / 2048 kb
+                $config['upload_path'] = './assets/img/profile/';
+
+                // mengirim ke libarary
+                $this->load->library('upload', $config);
+                
+                //1. jika berhasil mengupload image
+                if ($this->upload->do_upload('image')) {
+                    // agar foto yang lama terhapus saat user menguplad foto baru
+                    $old_image = $data['user']['image'];
+                    if ($old_image != 'default.jpg') {
+                        unlink(FCPATH.'assets/img/profile/'.$old_image);
+                    }
+                    // 2.ambil dulu nama gambar yg baru
+                    // 2.1. file_name harus seprti ini, tidak ada alternatif nama
+                    $new_image = $this->upload->data('file_name');
+                    // 3. kalau ada gambarnya, maka diisi ke database
+                    $this->db->set('image', $new_image);
+                } else {
+                    // ngecek error
+                    echo $this->upload->display_errors('');
+                }
+            }
+
+            $this->db->set('name', $name);
+            $this->db->where('email', $email);
+            $this->db->update('user');
+
+            $this->session->set_flashdata('message', '<div class="alert alert-success" role="alert">Profil berhasil diupdate</div>');
+            redirect('freelancer');
+        }
+    }
+
+    
+
+    public function changePassword()
+    {
+        $data['title'] = 'Change Password';
+        // ambil data session
+        $data['user'] = $this->db->get_where('user', ['email' => $this->session->userdata('email')])->row_array();
+
+
+        // current password rules
+        $this->form_validation->set_rules('current_password', 'Current Password', 'required|trim');
+        $this->form_validation->set_rules('new_password1', 'New Password', 'required|trim|min_length[3]|matches[new_password2]');
+        $this->form_validation->set_rules('new_password2', 'Confirm New Password', 'required|trim|min_length[3]|matches[new_password1]');
+
+        
+        // form validation
+        if ($this->form_validation->run() == false) {
+            $this->load->view('templates/header', $data);
+            $this->load->view('templates/sidebar', $data);
+            $this->load->view('templates/topbar', $data);
+            $this->load->view('freelancer/changepassword', $data);
+            $this->load->view('templates/footer');
+        } else {
+            $current_password = $this->input->post('current_password');
+            $new_password = $this->input->post('new_password1');
+            // $data['user']['password'] mengambil data password dari user
+            if (!password_verify($current_password, $data['user']['password'])) {
+                // jika password salah
+                $this->session->set_flashdata('message', '<div class="alert alert-danger" role="alert">Wrong current password!</div>');
+                redirect('freelancer/changepassword');
+            } else {
+                if ($current_password == $new_password) {
+                    // jika password sama dengan password sebelumnya
+                    $this->session->set_flashdata('message', '<div class="alert alert-danger" role="alert">Password tidak boleh sama dengan password sebelumnya!</div>');
+                    redirect('freelancer/changepassword');
+                } else {
+                    // password yang sudah benar
+                    $password_hash = password_hash($new_password, PASSWORD_DEFAULT);
+
+                    $this->db->set('password', $password_hash);
+                    $this->db->where('email', $this->session->userdata('email'));
+                    $this->db->update('user');
+
+                    $this->session->set_flashdata('message', '<div class="alert alert-success" role="alert">Password berhasil diganti</div>');
+                    redirect('freelancer/changepassword');
+                }
+            }
+        }
+    }
 }
